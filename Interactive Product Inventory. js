@@ -1,1 +1,106 @@
+/**
+ * Capstone Mini Project: Interactive Product Inventory & Analytics Dashboard
+ * Student Name: Keerthana K
+ */
+
+// ==========================================
+// 1. Data & Input Initialization
+// ==========================================
+
+// Pre-existing product inventory array
+const inventory = [
+  { name: "Laptop", price: 800 },
+  { name: "Mouse", price: 25 }
+];
+
+console.log("--- Initializing Inventory System ---");
+
+// Prompt user to add a new product name and price
+let userProductName = prompt("Enter product name:");
+let userProductPriceInput = prompt("Enter product price ($):");
+
+// Explicit type conversion & cleaning
+let userProductPrice = Number(userProductPriceInput);
+
+// Loop & Control Flow validation for invalid/missing user inputs
+while (!userProductName || isNaN(userProductPrice) || userProductPrice <= 0) {
+  alert("Invalid input! Please enter a valid product name and numeric price.");
+  userProductName = prompt("Enter product name:");
+  userProductPrice = Number(prompt("Enter product price ($):"));
+}
+
+// Add newly validated product to inventory
+inventory.push({ name: userProductName, price: userProductPrice });
+console.log(`[Prompt executed: User adds "${userProductName}" at "$${userProductPrice}"]\n`);
+
+
+// ==========================================
+// 2. Control Flow & Conditional Evaluation
+// ==========================================
+
+/**
+ * Assigns category badges based on price thresholds:
+ * - Budget: < $50
+ * - Standard: $50 to $200
+ * - Premium: > $200
+ */
+function getCategoryBadge(price) {
+  if (price < 50) {
+    return "Budget";
+  } else if (price <= 200) {
+    return "Standard";
+  } else {
+    return "Premium";
+  }
+}
+
+
+// ==========================================
+// 3. Functions & Scope
+// ==========================================
+
+/**
+ * Calculates the total value of all items in the inventory
+ */
+const calculateTotalValue = (inventoryArray) => {
+  let total = 0;
+  for (let i = 0; i < inventoryArray.length; i++) {
+    // Handling bad data dynamically if present
+    if (typeof inventoryArray[i].price !== "number") continue;
+    total += inventoryArray[i].price;
+  }
+  return total;
+};
+
+
+// ==========================================
+// 4. Array Methods & Iteration (Console Output)
+// ==========================================
+
+// Log complete processing roster using forEach()
+console.log("--- Processing Inventory Roster (forEach) ---");
+inventory.forEach((item) => {
+  const category = getCategoryBadge(item.price);
+  console.log(`* Item: ${item.name} ($${item.price}) -> Category: ${category}`);
+});
+
+console.log("\n--- Financial Analytics ---");
+
+// Total Inventory Value
+const totalValue = calculateTotalValue(inventory);
+console.log(`Total Inventory Value: $${totalValue}`);
+
+// Filter affordable items (Under $200) using filter()
+const affordableItems = inventory
+  .filter((item) => item.price < 200)
+  .map((item) => item.name);
+
+console.log(`Filtered Affordable Items (Under $200): ${JSON.stringify(affordableItems)}`);
+
+// Transform report summary using map()
+const formattedReportList = inventory.map(
+  (item) => `"${item.name.toUpperCase()}: $${item.price}"`
+);
+
+console.log(`Formatted Report List: [${formattedReportList.join(", ")}]`);
 
